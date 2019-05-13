@@ -1,0 +1,14 @@
+{
+  "name": "hiring-challenge",
+  "version": "1.0.0",
+  "description": "A simple application made for a hiring challenge",
+  "main": "index.js",
+  "scripts": {
+    "start": "ws"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "local-web-server": "^2.6.1"
+  }
+}
