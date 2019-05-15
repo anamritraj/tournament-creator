@@ -106,10 +106,19 @@ class Round {
   }
 }
 class Tournament {
-  constructor(teams) {
+  constructor(teams, selector) {
     this.teams = teams;
     this.noOfTeams = teams.length;
     this.rounds = [];
+    this.selector = selector;
+    this.teamsMap = this.generateTeamsMap();
+  }
+
+  generateTeamsMap() {
+    return this.teams.reduce((accumulator, current) => {
+      accumulator[current.teamId] = current;
+      return accumulator;
+    }, {});
   }
 
   startTournament() {
@@ -123,7 +132,7 @@ class Tournament {
       if (winners.length > 1) {
         setTimeout(() => self.startTournament(), 0);
       } else {
-        console.log("Winner is", self.teams);
+        console.log("Winner is", self.teams[0]);
       }
     });
   }
@@ -148,5 +157,7 @@ let teamList = [
   }
 ];
 
-let tournament = new Tournament(teamList);
+let selector = document.getElementById("tournament");
+
+let tournament = new Tournament(teamList, selector);
 tournament.startTournament();
