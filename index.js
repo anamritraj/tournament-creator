@@ -9,12 +9,12 @@ class Team {
 
 class Match {
   constructor(team1Id, team2Id) {
-    this.matchId = this.generateMatchId();
+    this.matchId = this.generateMatchId(10);
     this.team1Id = team1Id;
     this.team2Id = team2Id;
   }
 
-  generateMatchId() {
+  generateMatchId(length) {
     var result = "";
     var characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -34,8 +34,8 @@ class Match {
         let winnerId = Math.random() > 0.5 ? this.team1Id : this.team2Id;
 
         resolve({
-          matchId: matchId,
-          winnerId
+          matchId: this.matchId,
+          teamId: winnerId
         });
       }, 1000 * (5 + Math.random() * 5));
     });
@@ -113,18 +113,19 @@ class Tournament {
   }
 
   startTournament() {
-    let winnersSize = this.noOfTeams / 2;
-    console.log("Starting the tournament");
-    while (winnersSize > 1) {
-      console.log("winnersSize", winnersSize);
-      let round = new Round(this.teams);
-      this.rounds.push(round);
+    let self = this;
+    let round = new Round(this.teams);
+    this.rounds.push(round);
+    console.log("Starting Round: ", this.rounds.length);
 
-      round.startRoundMatches().then(winners => {
-        winnersSize = winners.length / 2;
-        this.teams = winners;
-      });
-    }
+    round.startRoundMatches().then(winners => {
+      self.teams = winners;
+      if (winners.length > 1) {
+        setTimeout(() => self.startTournament(), 0);
+      } else {
+        console.log("Winner is", self.teams);
+      }
+    });
   }
 }
 
